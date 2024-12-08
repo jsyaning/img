@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Brand Monitoring</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        text-align: center;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 50%;
+    }
+
+    input[type="search"] {
+        width: 500px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .stats {
+        margin-top: 60px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .stats strong {
+        color: #007bff;
+    }
+
+    table {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Brand Monitoring</h1>
+    <div>
+        <input type="search" id="searchBox" placeholder="Please enter the URL">
+        <button onclick="showStats()">Search</button>
+    </div>
+<!-- <p style="display: flex;margin-left: 15%;">update time: 11/22/2024 7:18 PM</p> -->
+<p id="updateTime" style="display: flex;margin-left: 15%;"></p>
+<script>
+    function updateCurrentTime() {
+        const currentTime = new Date();
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+        const formattedTime = currentTime.toLocaleDateString('en-US', options);
+        document.getElementById('updateTime').innerHTML = 'update time:'+ formattedTime;
+    }
+
+    // 页面加载时就先更新一次时间
+    window.onload = function () {
+        updateCurrentTime();
+        // 然后每隔1秒更新一次时间，让其动态实时变化，可根据需求调整间隔时间
+        setInterval(updateCurrentTime, 1000);
+    };
+</script>
+    <div class="stats" id="statsDisplay">
+        <!-- 统计信息将在这里显示 -->
+    </div>
+</div>
+
+<script>
+    // 模拟的数据
+    const statsData = [
+        { label: 'Views', value: 3031 },
+        { label: 'Clcks', value: 560 },
+        { label: 'Desk Readers', value: 2788 },
+        { label: 'U.S.', value: 505 },
+        { label: 'mobile readers', value: 238 },
+        { label: 'CA', value: 31 },
+        { label: 'search clicks', value: 5 },
+        { label: 'UK', value: 11 },
+        { label: 'Others', value: '13' }
+    ];
+
+    function capitalizeFirstLetter(str) {
+    return str;
+}
+
+    function showStats() {
+        // 构建统计信息表格
+        const statsTable = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Num</th>
+                        <th>Items</th>
+                        <th>Num</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${capitalizeFirstLetter(statsData[0].label)}</td>
+                        <td>${statsData[0].value}</td>
+                        <td>${capitalizeFirstLetter(statsData[1].label)}</td>
+                        <td>${statsData[1].value}</td>
+                    </tr>
+                    <tr>
+                        <td>${capitalizeFirstLetter(statsData[2].label)}</td>
+                        <td>${statsData[2].value}</td>
+                        <td>${capitalizeFirstLetter(statsData[3].label)}</td>
+                        <td>${statsData[3].value}</td>
+                    </tr>
+                    <tr>
+                        <td>${capitalizeFirstLetter(statsData[4].label)}</td>
+                        <td>${statsData[4].value}</td>
+                        <td>${capitalizeFirstLetter(statsData[5].label)}</td>
+                        <td>${statsData[5].value}</td>
+                    </tr>
+                    <tr>
+                        <td>${capitalizeFirstLetter(statsData[6].label)}</td>
+                        <td>${statsData[6].value}</td>
+                        <td>${capitalizeFirstLetter(statsData[7].label)}</td>
+                        <td>${statsData[7].value}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>${capitalizeFirstLetter(statsData[8].label)}</td>
+                        <td>${statsData[8].value}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+
+        // 显示统计信息
+        document.getElementById('statsDisplay').innerHTML = statsTable;
+    }
+</script>
+</body>
+</html>
