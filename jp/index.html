@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=100%, initial-scale=1.0">
+    <title>名字画像在线</title>
+	<script src="jquery-2.2.1.min.js"></script>
+	<script src="jquery.form.min.js"></script>
+	<script src="jquery.blockUI.js"></script>
+	<script src="compressor.js"></script>
+    <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-6.16.0.min.js"></script>
+	<script type="text/javascript">
+
+		function gen(formdata) {
+				$.blockUI({ message: '正在生成效果...' });
+                const client = new OSS({
+                // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
+                region: 'oss-cn-chengdu',
+                // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+                accessKeyId: 'LTAI5tMfKu8sBmrt77avMyqD',
+                accessKeySecret: 'qCTIBhI9oVf15IcnsgaQKGmHp6sxek',
+                // 从STS服务获取的安全令牌（SecurityToken）。
+                // stsToken: 'yourSecurityToken',
+                refreshSTSToken: async () => {
+                // 向您搭建的STS服务获取临时访问凭证。
+                const info = await fetch('your_sts_server');
+                return {
+                    accessKeyId: info.accessKeyId,
+                    accessKeySecret: info.accessKeySecret,
+                    stsToken: info.stsToken
+                }
+                },
+                // 刷新临时访问凭证的时间间隔，单位为毫秒。
+                refreshSTSTokenInterval: 300000,
+                // 填写Bucket名称。
+                bucket: 'tjlab-xjlz'
+            });
+			const rn=Math.random()*1000000
+            const fkey=''+rn+'.png'
+			const fkeyc=''+rn+'-color.png'
+			const fkeyf=''+rn+'-font.zip'
+            // var filesList = document.querySelector('#plr').files;
+			var filesListc = document.querySelector('#plrc').files;
+			// var filesListf = document.querySelector('#font').files;
+			const ftype='0'
+			const name=$("#name").val()
+			const size=$(".size:checked").val()
+			const exscale=$(".exscale:checked").val()
+			const pwr=$(".pwr:checked").val()
+			const deep=$(".deep:checked").val()
+
+			const userid='fyq1012'
+			$('#reimgs').attr('src',window.URL.createObjectURL(filesListc[0]));
+            console.log(filesListc[0])
+			
+            client.put(fkey, filesListc[0]).then(function (r){
+                console.log(r)
+                //获取上传图片包
+				client.put(fkeyc, filesListc[0]).then(function (r){
+					console.log(r)
+					// client.put(fkeyf, filesListf[0]).then(function (r){
+					//获取上传图片包
+						console.log(r)
+							$.ajax({
+							url:"https://chardraw-yaya-chardraw-gtuqzqohpo.cn-hangzhou.fcapp.run?keyname="+fkey+"&ftype="+ftype+"&name="+name+"&dr="+size+"&userid="+userid+"&exscale="+exscale+"&pwr="+pwr+"&deep="+deep,
+							data:{},
+							headers:{
+								"X-Fc-Invocation-Type":"Async"
+							},
+							async: true,
+							type:"POST",
+							contentType:false,
+							processData: false,
+							success:function(response){
+								$.unblockUI();
+								console.log(response)
+								const url = client.signatureUrl(fkey.substring(0,fkey.length-4)+'-'+userid+'-out.png',{expires: 3600})
+									$('#img_url_p').text(url)
+								dic=response
+								// dic=JSON.parse(response)
+								// if(dic["code"]!=0){
+								// 	alert(dic["msg"])
+								// }else{
+								// 	// $('#reimgs').attr('src',dic['data']['url'])
+									
+								// }
+							},
+							error:function(msg){
+								alert("出错了");
+								$.unblockUI();
+							}
+						});
+					});
+				});
+            // });
+				
+		}
+		
+		$(document).ready(function(){
+			$.support.cors = true;
+			// const myFile = $("#font")
+			// // 监听change事件 
+			// $('#start_btn').click(function () {
+			// 	alert('start....')
+			// 	myFile[0].addEventListener('change', function (e) {
+			// 		var filesList = document.querySelector('#font').files;
+			// 		if(filesList.length==0){ //如果取消上传，则上传文件的长度为0
+			// 			console.log("没有上传任何文件");
+			// 			return;
+			// 		}else{
+			// 			self.gen('')
+			// 		}
+			// 	});
+		// });
+	});
+
+	</script>
+</head>
+<body style="background-color: black;color: white;">
+	<div style="font-size:16px;">
+	<form id="instaxform" action="" method="post" enctype="multipart/form-data"  onsubmit="return false;">
+		<!-- 黑白<input id="plr" type="file" name="img" accept="image" /> -->
+		 <!-- 示例：创建一个文本输入框 -->
+		<br>
+		<input type="name" name="name" class="name" id="name" placeholder="请输入用户名">
+		<br>
+		彩色<input id="plrc" type="file" name="img" accept="image" />
+		<br>
+		字号
+		<input class="size" id='sizec' type="radio" name="size" value="20" >  20</input>
+		<input class="size" id='sizec' type="radio" name="size" value="30" >  30</input>
+		<input class="size" id='sizec' type="radio" name="size" value="40" >  40</input>
+		<input class="size" id='sizec' type="radio" name="size" value="50" >  50</input>
+		<input class="size" id='sizec' type="radio" name="size" value="60" >  60</input>
+		<input class="size" id='sizec' type="radio" name="size" value="80" checked='checked'>  80</input>
+		<input class="size" id='sizec' type="radio" name="size" value="100" >  100</input>
+		<input class="size" id='sizec' type="radio" name="size" value="120" >  120</input>
+		<br>
+		粗细<input class="exscale" id='exscale' type="radio" name="exscale" value="0.9" >  0.9</input>
+		<input class="exscale" id='exscale' type="radio" name="exscale" value="1.0" checked='checked'>  1.0</input>
+		<input class="exscale" id='exscale' type="radio" name="exscale" value="1.25" >  1.25</input>
+		<input class="exscale" id='exscale' type="radio" name="exscale" value="1.5" >  1.5</input>
+		<input class="exscale" id='exscale' type="radio" name="exscale" value="2.0" >  2.0</input>
+		<br>
+		高光稀密<input class="pwr" id='pwr' type="radio" name="pwr" value="1.0" >  1.0</input>
+		<input class="pwr" id='pwr' type="radio" name="pwr" value="2.0" >  2.0</input>
+		<input class="pwr" id='pwr' type="radio" name="pwr" value="2.5" >  2.5</input>
+		<input class="pwr" id='pwr' type="radio" name="pwr" value="3.0" >  3.0</input>
+		<input class="pwr" id='pwr' type="radio" name="pwr" value="4.0" >  4.0</input>
+		<input class="pwr" id='pwr' type="radio" name="pwr" value="5.0" checked='checked'>  5.0</input>
+		<br>
+		整体稀密<input class="deep" id='deep' type="radio" name="deep" value="1.0" >  1.0</input>
+		<input class="deep" id='deep' type="radio" name="deep" value="0.85" >  0.85</input>
+		<input class="deep" id='deep' type="radio" name="deep" value="0.75" >  0.75</input>
+		<input class="deep" id='deep' type="radio" name="deep" value="0.5" >  0.5</input>
+		<input class="deep" id='deep' type="radio" name="deep" value="0.4" >  0.4</input>
+		<input class="deep" id='deep' type="radio" name="deep" value="0.25" checked='checked'>  0.25</input>
+		<br>
+		<!-- 字体<input id="font" type="file" name="font" accept="file" /> -->
+		<!-- <br> -->
+		<button type="button" id="'start_btn" onclick="self.gen()">start</button>
+	</form>
+   <!-- <label style="font-size:14px">长按图片可保存</label> -->
+	</div>
+   <img id='reimgs'src="" style="width: 200px;"></img>
+   <img id='reimgd'src="" style="width: 260px;"></img>
+   <div style="position: fixed;bottom: 0;width: 100%; background-color: white;">
+	<p style="font-size:16px;left:100px;margin: 0px 0px 0px 5px; color:#939393;"></p></a>
+	</div>
+	<p id="img_url_p">
+
+	</p>
+</body>
+</html>
+
