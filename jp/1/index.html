@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>内 部 专 用</title>
+  <style>
+    /* 背景图和动画结合 */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('static/images/mq-temp6-banner.jpg') no-repeat center center fixed;
+      background-size: cover; /* 保持背景图的原始大小 */
+      font-family: 'Arial', sans-serif;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        filter: brightness(0.8);
+      }
+      50% {
+        filter: brightness(1.2);
+      }
+      100% {
+        filter: brightness(0.8);
+      }
+    }
+
+    /* 表单容器 */
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* 背景光效 */
+    .form-container:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
+      animation: rotateBG 6s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes rotateBG {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      background-image: linear-gradient(135deg, #ff7e5f, #feb47b);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-position 0.5s, transform 0.3s ease;
+      background-size: 200% 200%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <form method="post" action="/submit">
+      <label for="password">请输入密码：</label>
+      <input type="password" id="password" name="password" required>
+      <label for="cookie">请输入Cookie：</label>
+      <input type="text" id="cookie" name="cookie" required>
+      <label for="number">请输入数字：</label>
+      <input type="number" id="number" name="number" required>
+      <input type="submit" value="提交">
+    </form>
+  </div>
+</body>
+
+</html>
